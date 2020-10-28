@@ -10,10 +10,11 @@ dataset.info()
 dataset = shuffle(dataset)
 # print(dataset)
 x = dataset.iloc[:,1:10].values
+# Doing the generalization when setting up the dataset
 x = (x - np.min(x)) / (np.max(x) - np.min(x))
 y = dataset.iloc[:,10].values
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x,y,test_size = 0.5,random_state=0)
+x_train, x_test, y_train, y_test = train_test_split(x,y,test_size = 0.2,random_state=0)
 
 y_train = y_train.reshape(-1,1)
 y_test = y_test.reshape(-1,1)
@@ -24,9 +25,11 @@ print("y_train: ",y_train.shape)
 print("y_test: ",y_test.shape)
 
 from sklearn.neural_network import MLPClassifier
-model = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(25,11,7,5,3,), random_state=1,max_iter=1000, learning_rate_init=0.01)
+model = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(100,50,20,), random_state=1,max_iter=1000, learning_rate_init=0.01)
+# model = MLPClassifier(solver='sgd', activation='relu',alpha=1e-4,hidden_layer_sizes=(50,50), random_state=1,max_iter=1000,verbose=10,learning_rate_init=.01)
 structure = model.fit(x_train, y_train)
 y_pred = model.predict(x_test)
+# print("!!!",y_pred)
 print(structure)
 print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
 
